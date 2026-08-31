@@ -1,18 +1,28 @@
+// Package main starts the URL shortener HTTP server.
 package main
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
+func setupRouter() *gin.Engine {
 	router := gin.New()
 
 	router.Use(gin.Logger())
-	router.Use(gin.Recovery())	
+	router.Use(gin.Recovery())
 
 	router.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong")
+		c.String(http.StatusOK, "pong")
 	})
 
-	router.Run(":8080")
+	return router
+}
+
+func main() {
+	if err := setupRouter().Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
 }
